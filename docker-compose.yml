@@ -10,6 +10,7 @@ services:
     environment:
       PORT: 4000
       REDIS_PORT: 6379
+      REDIS_HOST: redis
       SESSION_PATH: /run/secrets/session_path
       SECRET_KEY_FILE: /run/secrets/secret_key
       REDIS_URL_FILE: /run/secrets/redis_url
@@ -21,9 +22,22 @@ services:
       - supabase_url
       - supabase_key
       - session_path
+    depends_on:
+      - redis
     volumes:
       - ./app:/app
       - /app/node_modules
+      - ./session5202:/app/session
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
 
 secrets:
   session_path:
@@ -36,3 +50,6 @@ secrets:
     file: ./secrets/supabase_url.txt
   supabase_key:
     file: ./secrets/supabase_key.txt
+
+volumes:
+  redis_data:
