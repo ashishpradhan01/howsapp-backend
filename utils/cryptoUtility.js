@@ -1,5 +1,9 @@
 const crypto = require("crypto");
-const SECRET_KEY = process.env.SECRET_KEY;
+const fs = require("fs");
+
+const SECRET_KEY = process.env.SECRET_KEY_FILE
+  ? fs.readFileSync(process.env.SECRET_KEY_FILE, "utf8")
+  : process.env.SECRET_KEY;
 const IV_LENGTH = 16; // AES requires 16-byte IV
 
 const encrypt = (value) => {

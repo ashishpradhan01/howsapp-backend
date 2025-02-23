@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  node-app:
+    build: .
+    container_name: node-app
+    ports:
+      - "9000:4000"
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      REDIS_PORT: 6379
+      SECRET_KEY_FILE: /run/secrets/secret_key
+      REDIS_URL_FILE: /run/secrets/redis_url
+      SUPABASE_URL_FILE: /run/secrets/supabase_url
+      SUPABASE_KEY_FILE: /run/secrets/supabase_key
+    secrets:
+      - secret_key
+      - redis_url
+      - supabase_url
+      - supabase_key
+
+secrets:
+  secret_key:
+    file: ./secrets/secret_key.txt
+  redis_url:
+    file: ./secrets/redis_url.txt
+  supabase_url:
+    file: ./secrets/supabase_url.txt
+  supabase_key:
+    file: ./secrets/supabase_key.txt
