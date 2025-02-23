@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const SELECTORS = {
   LOADING: "progress",
   INSIDE_CHAT: "document.getElementsByClassName('two')[0]",
@@ -8,7 +10,9 @@ const SELECTORS = {
   AUTO_LOGOUT_INPUT: `document.getElementById("auto-logout-toggle")`,
 };
 
-const SESSION_PATH = `./sessions`;
+const SESSION_PATH = process.env.SESSION_PATH
+  ? fs.readFileSync(process.env.SESSION_PATH, "utf8").trim()
+  : process.env.SESSION_PATH;
 const SHOW_BROWSER = false;
 
 module.exports = { SELECTORS, SESSION_PATH, SHOW_BROWSER };

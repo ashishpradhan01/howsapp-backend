@@ -10,6 +10,7 @@ services:
     environment:
       PORT: 4000
       REDIS_PORT: 6379
+      SESSION_PATH: /run/secrets/session_path
       SECRET_KEY_FILE: /run/secrets/secret_key
       REDIS_URL_FILE: /run/secrets/redis_url
       SUPABASE_URL_FILE: /run/secrets/supabase_url
@@ -19,8 +20,14 @@ services:
       - redis_url
       - supabase_url
       - supabase_key
+      - session_path
+    volumes:
+      - ./app:/app
+      - /app/node_modules
 
 secrets:
+  session_path:
+    file: ./secrets/session_path.txt
   secret_key:
     file: ./secrets/secret_key.txt
   redis_url:
