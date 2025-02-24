@@ -17,7 +17,7 @@ RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
 # Copy package.json and package-lock.json first to leverage caching
-COPY package.json package-lock.json ./
+COPY package*.json ./
 
 # Install dependencies (including Puppeteer)
 RUN npm install
