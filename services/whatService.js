@@ -68,11 +68,16 @@ const initializeWhatsAppWebSession = async (
   // Configure Puppeteer arguments
   const args = {
     headless: !showBrowser, // Run headless or not based on showBrowser flag
+    executablePath:
+      process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser", // Use system-installed Chromium
     userDataDir: sessionPath, // Use session-specific data directory
     args: [
-      "--no-sandbox",
-      // "--disable-features=VizDisplayList", // Optional flag for optimization
-      // "--blink-settings=imagesEnabled=false" // Optional flag to disable images
+      "--no-sandbox", // Required to run Puppeteer in a container
+      "--disable-setuid-sandbox", // Helps avoid permission issues
+      "--disable-dev-shm-usage", // Prevents crashes due to shared memory issues
+      "--disable-gpu", // Disables GPU acceleration (improves stability)
+      "--single-process", // Forces Chromium to run in a single process
+      "--disable-software-rasterizer", // Prevents GPU-related issues
     ],
   };
 

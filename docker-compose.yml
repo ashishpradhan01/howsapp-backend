@@ -16,6 +16,7 @@ services:
       REDIS_URL_FILE: /run/secrets/redis_url
       SUPABASE_URL_FILE: /run/secrets/supabase_url
       SUPABASE_KEY_FILE: /run/secrets/supabase_key
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
     secrets:
       - secret_key
       - redis_url
@@ -26,6 +27,7 @@ services:
         condition: service_healthy # Wait until Redis is fully ready
     volumes:
       - ./session:/opt/app/session
+      - /dev/shm:/dev/shm # Fixes Puppeteer shared memory issue
     networks:
       - app-network
 
