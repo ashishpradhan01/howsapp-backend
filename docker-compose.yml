@@ -25,7 +25,7 @@ services:
       redis:
         condition: service_healthy # Wait until Redis is fully ready
     volumes:
-      - /session:/opt/app/session
+      - ./session:/opt/app/session
     networks:
       - app-network
 

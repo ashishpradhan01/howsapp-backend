@@ -12,6 +12,7 @@ debug.log*
 /dist/
 /build/
 coverage/
+session/
 /tmp/
 *.log
 package-lock.json
