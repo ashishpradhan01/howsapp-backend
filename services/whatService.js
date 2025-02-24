@@ -102,7 +102,10 @@ const initializeWhatsAppWebSession = async (
   console.log("Opening WhatsApp Web...");
 
   // Navigate to the WhatsApp Web URL
-  await page.goto("https://web.whatsapp.com");
+  await page.goto("https://web.whatsapp.com", {
+    waitUntil: "networkidle2",
+    timeout: 0,
+  });
 
   // Return an object containing sessionId, browser instance, and page instance
   return { sessionId, browser, page };

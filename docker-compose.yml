@@ -30,6 +30,15 @@ services:
       - /dev/shm:/dev/shm # Fixes Puppeteer shared memory issue
     networks:
       - app-network
+    shm_size: "2gb" # Increase shared memory to 2GB
+    deploy:
+      resources:
+        limits:
+          cpus: "2" # Limit to 2 CPU cores
+          memory: "4GB" # Limit memory to 4GB
+        reservations:
+          cpus: "1" # Reserve at least 1 CPU core
+          memory: "2GB" # Reserve at least 2GB of memory
 
   redis:
     image: redis:latest
