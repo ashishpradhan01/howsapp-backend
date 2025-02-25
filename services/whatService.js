@@ -69,15 +69,16 @@ const initializeWhatsAppWebSession = async (
   const args = {
     headless: !showBrowser, // Run headless or not based on showBrowser flag
     executablePath:
-      process.env.PUPPETEER_EXECUTABLE_PATH || "/usr/bin/chromium-browser", // Use system-installed Chromium
+      process.env.PUPPETEER_EXECUTABLE_PATH || puppeteer.executablePath(), // Use system-installed Chromium
     userDataDir: sessionPath, // Use session-specific data directory
     args: [
       "--no-sandbox", // Required to run Puppeteer in a container
       "--disable-setuid-sandbox", // Helps avoid permission issues
       "--disable-dev-shm-usage", // Prevents crashes due to shared memory issues
-      "--disable-gpu", // Disables GPU acceleration (improves stability)
-      "--single-process", // Forces Chromium to run in a single process
-      "--disable-software-rasterizer", // Prevents GPU-related issues
+      // "--disable-gpu", // Disables GPU acceleration (improves stability)
+      //"--single-process", // Forces Chromium to run in a single process
+      // "--disable-software-rasterizer", // Prevents GPU-related issues
+      "--no-zygote",
     ],
   };
 

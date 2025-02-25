@@ -16,7 +16,8 @@ services:
       REDIS_URL_FILE: /run/secrets/redis_url
       SUPABASE_URL_FILE: /run/secrets/supabase_url
       SUPABASE_KEY_FILE: /run/secrets/supabase_key
-      PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+      PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
     secrets:
       - secret_key
       - redis_url
