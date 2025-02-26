@@ -6,7 +6,7 @@ const {
 
 const router = express.Router();
 
-router.get("/start-session", async (req, res) => {
+router.get("/handshake", async (req, res) => {
   try {
     /**
      * Calls startNewSession:

@@ -75,16 +75,33 @@ const initializeWhatsAppWebSession = async (
       "--no-sandbox", // Required to run Puppeteer in a container
       "--disable-setuid-sandbox", // Helps avoid permission issues
       "--disable-dev-shm-usage", // Prevents crashes due to shared memory issues
-      // "--disable-gpu", // Disables GPU acceleration (improves stability)
-      //"--single-process", // Forces Chromium to run in a single process
-      // "--disable-software-rasterizer", // Prevents GPU-related issues
+      "--disable-gpu", // Disables GPU acceleration (improves stability)
+      "--single-process", // Forces Chromium to run in a single process
+      "--disable-software-rasterizer", // Prevents GPU-related issues
       "--no-zygote",
+      "--mute-audio", // Prevents unnecessary audio processing
+      "--disable-renderer-backgrounding",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-background-timer-throttling",
+      "--disable-background-networking",
+      "--disable-extensions", // Disable browser extensions
     ],
   };
 
   // Launch a new Puppeteer browser instance with the specified arguments
   const browser = await puppeteer.launch(args);
   const page = await browser.newPage();
+
+  // Block unnecessary resource types, but **allow stylesheets**
+  await page.setRequestInterception(true);
+  page.on("request", (request) => {
+    const resourceType = request.resourceType();
+    if (["image", "font", "media", "xhr"].includes(resourceType)) {
+      request.abort(); // Block images, fonts, media
+    } else {
+      request.continue();
+    }
+  });
 
   // Handle dialog boxes by automatically accepting them
   page.on("dialog", async (dialog) => {
