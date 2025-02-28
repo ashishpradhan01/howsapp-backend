@@ -13,7 +13,6 @@ const {
   doesSessionExist,
   generateSessionId,
 } = require("../utils/sessionUtility");
-const supabase = require("../config/supabaseClient");
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 /**
@@ -76,15 +75,7 @@ const initializeWhatsAppWebSession = async (
       "--disable-setuid-sandbox", // Helps avoid permission issues
       "--disable-dev-shm-usage", // Prevents crashes due to shared memory issues
       "--disable-gpu", // Disables GPU acceleration (improves stability)
-      "--single-process", // Forces Chromium to run in a single process
       "--disable-software-rasterizer", // Prevents GPU-related issues
-      "--no-zygote",
-      "--mute-audio", // Prevents unnecessary audio processing
-      "--disable-renderer-backgrounding",
-      "--disable-backgrounding-occluded-windows",
-      "--disable-background-timer-throttling",
-      "--disable-background-networking",
-      "--disable-extensions", // Disable browser extensions
     ],
   };
 
@@ -94,9 +85,10 @@ const initializeWhatsAppWebSession = async (
 
   // Block unnecessary resource types, but **allow stylesheets**
   await page.setRequestInterception(true);
+
   page.on("request", (request) => {
     const resourceType = request.resourceType();
-    if (["image", "font", "media", "xhr"].includes(resourceType)) {
+    if (["image", "font", "media"].includes(resourceType)) {
       request.abort(); // Block images, fonts, media
     } else {
       request.continue();
@@ -406,11 +398,6 @@ async function sendTo(page, phoneOrContact, message) {
   }
 }
 
-// sendRequest: [
-//   { message: "YOUR_MESSAGE", numbers: [] },
-//   { message: "YOUR_MESSAGE", numbers: [] },
-// ];
-
 /**
  * Sends the same message to multiple phone numbers or contacts concurrently
  * @param {Array<string|object>} phoneOrContacts - List of phone numbers or contact objects
@@ -475,24 +462,6 @@ async function sendToWrapper(page, phoneOrContacts, message) {
     await sendTo(page, phone, message);
   }
 }
-
-// async function scheduleMessage(sessionId, message, sendAt, recipient) {
-//   const { data, error } = await supabase.from("scheduled_messages").insert([
-//     {
-//       session_id: sessionId,
-//       message,
-//       send_at: sendAt,
-//       recipient,
-//       sent: false,
-//     },
-//   ]);
-
-//   if (error) {
-//     console.error("Error saving scheduled message:", error);
-//   } else {
-//     console.log("Message scheduled:", data);
-//   }
-// }
 
 module.exports = {
   initializeNewWhatsWebSession,
